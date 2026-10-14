@@ -1,0 +1,241 @@
+/* Le variabili --bg, --fg, --link, --accent, --muted, --border, --code-bg
+   arrivano dalla palette Qt (vedi MarkdownView::pageHtml). */
+
+:root {
+    color-scheme: light dark;
+    --radius: 6px;
+    --measure: 860px;
+}
+
+html { background: var(--bg); }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, "Noto Sans", "Inter", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+article {
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: 40px 48px 96px;
+    overflow-wrap: break-word;
+}
+
+/* ── Titoli ─────────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.25;
+    font-weight: 650;
+    margin: 1.8em 0 0.6em;
+    scroll-margin-top: 16px;
+}
+h1 { font-size: 2em;   padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+h3 { font-size: 1.25em; }
+h4 { font-size: 1em; }
+h5, h6 { font-size: 0.9em; color: var(--muted); }
+article > :first-child { margin-top: 0; }
+
+h1:hover .anchor, h2:hover .anchor, h3:hover .anchor,
+h4:hover .anchor, h5:hover .anchor, h6:hover .anchor { opacity: 1; }
+.anchor {
+    opacity: 0;
+    margin-left: -1.1em;
+    padding-right: 0.25em;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 400;
+}
+
+/* ── Testo ──────────────────────────────────────────────── */
+
+p, ul, ol, dl, table, pre, blockquote, details, .callout { margin: 0 0 1em; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+a.wikilink { border-bottom: 1px dashed color-mix(in srgb, var(--link) 60%, transparent); }
+a.wikilink:hover { text-decoration: none; border-bottom-style: solid; }
+.wikilink.missing { color: var(--muted); border-bottom: 1px dashed var(--muted); cursor: help; }
+
+strong { font-weight: 650; }
+del { color: var(--muted); }
+mark { background: color-mix(in srgb, var(--accent) 35%, transparent); color: inherit; padding: 0 2px; border-radius: 3px; }
+
+hr {
+    height: 1px;
+    margin: 2em 0;
+    border: 0;
+    background: var(--border);
+}
+
+img { max-width: 100%; border-radius: var(--radius); }
+
+/* ── Liste ──────────────────────────────────────────────── */
+
+ul, ol { padding-left: 1.8em; }
+li + li { margin-top: 0.25em; }
+li > ul, li > ol { margin: 0.25em 0 0; }
+
+li.task-list-item { list-style: none; position: relative; }
+li.task-list-item > input[type=checkbox] {
+    position: absolute;
+    left: -1.5em;
+    top: 0.35em;
+    margin: 0;
+    width: 1em;
+    height: 1em;
+    accent-color: var(--accent);
+}
+li.task-list-item:has(> input:checked) { color: var(--muted); }
+
+/* ── Codice ─────────────────────────────────────────────── */
+
+code, pre, kbd {
+    font-family: "JetBrains Mono", "Fira Code", "Source Code Pro", ui-monospace, monospace;
+    font-size: 0.875em;
+}
+
+:not(pre) > code {
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    background: var(--code-bg);
+}
+
+pre {
+    position: relative;
+    padding: 14px 16px;
+    overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--code-bg);
+    line-height: 1.5;
+}
+pre code, pre code.hljs { padding: 0; background: transparent; font-size: 1em; }
+
+pre[data-lang]::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-size: 0.7em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: system-ui, sans-serif;
+}
+
+kbd {
+    padding: 0.1em 0.45em;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: var(--code-bg);
+}
+
+/* ── Citazioni e callout ────────────────────────────────── */
+
+blockquote {
+    margin-left: 0;
+    padding: 0.1em 1em;
+    color: var(--muted);
+    border-left: 4px solid var(--border);
+}
+blockquote > :last-child { margin-bottom: 0; }
+
+.callout {
+    --c: var(--accent);
+    padding: 0.6em 1em;
+    border-left: 4px solid var(--c);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: color-mix(in srgb, var(--c) 10%, transparent);
+    color: var(--fg);
+}
+.callout > :last-child { margin-bottom: 0; }
+.callout-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 0.3em;
+    font-weight: 650;
+    color: var(--c);
+}
+.callout-title:only-child { margin-bottom: 0; }
+.callout-icon { width: 1.1em; height: 1.1em; flex: none; }
+
+.callout[data-type=note],    .callout[data-type=info]      { --c: #4493f8; }
+.callout[data-type=tip],     .callout[data-type=hint],
+.callout[data-type=success], .callout[data-type=check],
+.callout[data-type=done]                                   { --c: #3fb950; }
+.callout[data-type=important], .callout[data-type=abstract],
+.callout[data-type=summary], .callout[data-type=example]   { --c: #ab7df8; }
+.callout[data-type=warning], .callout[data-type=caution],
+.callout[data-type=attention], .callout[data-type=question],
+.callout[data-type=faq], .callout[data-type=help]          { --c: #d29922; }
+.callout[data-type=danger],  .callout[data-type=error],
+.callout[data-type=bug],     .callout[data-type=failure],
+.callout[data-type=fail],    .callout[data-type=missing]   { --c: #f85149; }
+.callout[data-type=quote],   .callout[data-type=cite]      { --c: var(--muted); }
+
+/* ── Tabelle ────────────────────────────────────────────── */
+
+table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+}
+th, td { padding: 6px 13px; border: 1px solid var(--border); }
+th { font-weight: 650; background: var(--code-bg); }
+tr:nth-child(2n) td { background: color-mix(in srgb, var(--code-bg) 50%, transparent); }
+
+/* ── Frontmatter ────────────────────────────────────────── */
+
+details.frontmatter {
+    font-size: 0.85em;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.4em 0.9em;
+    margin-bottom: 2em;
+}
+details.frontmatter summary { cursor: pointer; color: var(--muted); user-select: none; }
+details.frontmatter table { margin: 0.6em 0 0.2em; display: table; width: 100%; }
+details.frontmatter th, details.frontmatter td { border: 0; padding: 2px 8px; background: none; text-align: left; vertical-align: top; }
+details.frontmatter th { width: 1%; white-space: nowrap; color: var(--muted); font-weight: 500; }
+
+/* ── Note a piè di pagina ───────────────────────────────── */
+
+sup > a { padding: 0 0.15em; }
+section.footnotes {
+    margin-top: 3em;
+    padding-top: 1em;
+    border-top: 1px solid var(--border);
+    font-size: 0.875em;
+    color: var(--muted);
+}
+.footnote-backref { margin-left: 0.3em; }
+
+/* ── Formule ────────────────────────────────────────────── */
+
+x-equation[type=display] { display: block; overflow-x: auto; overflow-y: hidden; margin: 1em 0; text-align: center; }
+.katex { font-size: 1.1em; }
+.katex-error { color: #f85149; }
+
+/* ── Selezione e barre di scorrimento ───────────────────── */
+
+::selection { background: color-mix(in srgb, var(--accent) 40%, transparent); }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--fg) 25%, transparent); border-radius: 6px; border: 3px solid var(--bg); }
+::-webkit-scrollbar-track { background: transparent; }
+
+@media print {
+    article { max-width: none; padding: 0; }
+    .anchor { display: none; }
+}
