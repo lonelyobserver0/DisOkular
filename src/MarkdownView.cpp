@@ -7,6 +7,9 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QMenu>
+#include <QOffscreenSurface>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 #include <QStandardItemModel>
 #include <QVBoxLayout>
 #include <QWebEngineContextMenuRequest>
@@ -113,6 +116,34 @@ QWebEngineScript enhancerScript()
     return script;
 }
 
+// QtWebEngine condivide le immagini del renderer con Qt tramite GBM; se crede di essere
+// su NVIDIA lo disattiva e ripiega su Vulkan. Con grafica ibrida (sessione con
+// __GLX_VENDOR_LIBRARY_NAME=nvidia, Qt che rende su Intel con Mesa) quel ripiego va in
+// crash dentro Mesa all'apertura della prima pagina. Se Qt è su Mesa, GBM funziona:
+// lo si forza. Va fatto prima che nasca il primo QWebEngineView.
+void enableGbmOnMesa()
+{
+    static bool done = false;
+    if (done)
+        return;
+    done = true;
+    if (qEnvironmentVariableIsSet("QTWEBENGINE_FORCE_USE_GBM"))
+        return;   // scelta esplicita dell'utente
+
+    QOpenGLContext ctx;
+    QOffscreenSurface surface;
+    surface.create();
+    if (!ctx.create() || !ctx.makeCurrent(&surface))
+        return;
+    const auto str = [&](GLenum name) {
+        return QString::fromLatin1(reinterpret_cast<const char *>(ctx.functions()->glGetString(name)));
+    };
+    const bool mesa = str(GL_RENDERER).contains(u"Mesa"_s) || str(GL_VERSION).contains(u"Mesa"_s);
+    ctx.doneCurrent();
+    if (mesa)
+        qputenv("QTWEBENGINE_FORCE_USE_GBM", "1");
+}
+
 } // namespace
 
 void MarkdownView::registerUrlScheme()
@@ -126,9 +157,11 @@ void MarkdownView::registerUrlScheme()
 
 MarkdownView::MarkdownView(const QString &path, QWidget *parent)
     : DocumentView(path, parent)
-    , m_view(new QWebEngineView(this))
     , m_outline(new QStandardItemModel(this))
 {
+    enableGbmOnMesa();
+    m_view = new QWebEngineView(this);
+
     m_outlineTimer.setSingleShot(true);
     m_outlineTimer.setInterval(150);
     connect(&m_outlineTimer, &QTimer::timeout, this, &MarkdownView::refreshOutline);
