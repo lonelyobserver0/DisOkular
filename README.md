@@ -71,7 +71,28 @@ need `biber` and `texlive-bibtexextra`.
 highlight.js 11.11.1 and KaTeX 0.16.22 are vendored in `third_party/` and compiled into the
 binary as Qt resources, so no network access is needed at runtime.
 
-### Build and run
+### Quick install
+
+`install.sh` checks the dependencies, builds a Release binary and installs it:
+
+```sh
+./install.sh                 # into ~/.local, no root needed
+./install.sh --system        # into /usr/local, using sudo
+./install.sh --set-default   # also make DisOkular the default app for PDF, Markdown and LaTeX
+./install.sh --uninstall     # removes what the last install put in place
+./install.sh --help          # all options: --prefix, --build-type, --build-dir, --jobs, --clean
+```
+
+Besides the binary, the install adds a desktop entry (`share/applications/disokular.desktop`)
+and an icon (`share/icons/hicolor/scalable/apps/disokular.svg`), so DisOkular shows up in
+application launchers and in "Open with" menus. The binary itself is self-contained:
+stylesheets, scripts and fonts are compiled in as Qt resources.
+
+`--set-default` changes the per-user associations in `~/.config/mimeapps.list` for
+`application/pdf`, `text/markdown` and `text/x-tex`. The previous defaults are saved first,
+and `--uninstall` puts them back exactly as they were.
+
+### Build and run manually
 
 ```sh
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -156,7 +177,8 @@ src/
   OutlinePanel         bookmarks/headings tree shared by all formats
   WelcomePage, History welcome page and document history
   SingleInstance       QLocalServer-based single instance
-resources/             Markdown stylesheet and enhancement script
+install.sh             build + install / uninstall helper
+resources/             Markdown stylesheet and script, desktop entry, application icon
 third_party/           highlight.js and KaTeX (with their licences)
 ```
 

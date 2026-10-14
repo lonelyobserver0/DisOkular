@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QFileInfo>
+#include <QIcon>
 #include <QJsonArray>
 
 static QString absolute(const QString &path)
@@ -19,6 +20,9 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName(QStringLiteral("DisOkular"));
     QApplication::setOrganizationName(QStringLiteral("LoneObs"));
     QApplication::setApplicationVersion(QStringLiteral("0.1"));
+    // Su Wayland diventa l'app_id: il compositore trova così disokular.desktop e la sua icona.
+    QGuiApplication::setDesktopFileName(QStringLiteral("disokular"));
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("disokular"), QIcon(QStringLiteral(":/icons/disokular.svg"))));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral(

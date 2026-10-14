@@ -11,6 +11,7 @@ find_package(md4c REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SYNCTEX REQUIRED IMPORTED_TARGET synctex)
 qt_standard_project_setup()
+include(GNUInstallDirs)
 
 qt_add_executable(disokular
     src/main.cpp
@@ -32,6 +33,12 @@ qt_add_resources(disokular "markdown"
     PREFIX "/md"
     BASE resources
     FILES resources/markdown.css resources/markdown.js
+)
+# Icona della finestra, quando il tema non ne fornisce una.
+qt_add_resources(disokular "icons"
+    PREFIX "/icons"
+    BASE resources
+    FILES resources/disokular.svg
 )
 file(GLOB KATEX_FONTS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} third_party/katex/fonts/*.woff2)
 qt_add_resources(disokular "markdown_third_party"
@@ -55,4 +62,8 @@ target_link_libraries(disokular PRIVATE
 )
 target_compile_options(disokular PRIVATE -Wall -Wextra)
 
-install(TARGETS disokular RUNTIME DESTINATION bin)
+install(TARGETS disokular RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+# Launcher, associazioni ai tipi di file e icona (il nome "disokular" li lega tra loro
+# e all'app_id della finestra su Wayland: vedi setDesktopFileName in main.cpp).
+install(FILES resources/disokular.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+install(FILES resources/disokular.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)

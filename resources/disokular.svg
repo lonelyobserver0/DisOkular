@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DisOkular: una pagina con l'angolo piegato e un occhio. SPDX-License-Identifier: GPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e8edf4"/>
+    </linearGradient>
+    <linearGradient id="iris" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5b8ff7"/>
+      <stop offset="1" stop-color="#2554c7"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0b1a33" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <!-- Pagina -->
+  <path d="M28 10 H80 L104 34 V112 a6 6 0 0 1 -6 6 H28 a6 6 0 0 1 -6 -6 V16 a6 6 0 0 1 6 -6 Z"
+        fill="url(#page)" stroke="#9aa6b8" stroke-width="2" filter="url(#shadow)"/>
+  <!-- Angolo piegato -->
+  <path d="M80 10 V28 a6 6 0 0 0 6 6 H104 Z" fill="#cfd8e5" stroke="#9aa6b8" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Righe di testo -->
+  <g stroke="#b9c3d1" stroke-width="4" stroke-linecap="round">
+    <line x1="34" y1="30" x2="66" y2="30"/>
+    <line x1="34" y1="42" x2="72" y2="42"/>
+    <line x1="34" y1="96" x2="92" y2="96"/>
+    <line x1="34" y1="106" x2="78" y2="106"/>
+  </g>
+
+  <!-- Occhio -->
+  <path d="M26 68 C40 50 54 46 63 46 C72 46 86 50 100 68 C86 86 72 90 63 90 C54 90 40 86 26 68 Z"
+        fill="#ffffff" stroke="#1f2a3c" stroke-width="3.5" stroke-linejoin="round"/>
+  <circle cx="63" cy="68" r="15" fill="url(#iris)"/>
+  <circle cx="63" cy="68" r="6.5" fill="#0f1a2e"/>
+  <circle cx="68" cy="63" r="3.2" fill="#ffffff" opacity="0.9"/>
+</svg>
