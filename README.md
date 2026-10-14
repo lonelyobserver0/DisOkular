@@ -173,6 +173,19 @@ don't know which format they are showing.
 
 ## Licence
 
-No licence has been chosen for DisOkular yet. Third-party code keeps its own licence:
-highlight.js (BSD-3-Clause, `third_party/highlight/LICENSE`) and KaTeX (MIT,
-`third_party/katex/LICENSE`).
+Copyright © 2026 LoneObs
+
+DisOkular is free software: you can redistribute it and/or modify it under the terms of
+the GNU General Public License as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later version.
+
+DisOkular is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the [GNU General Public License](LICENSE) for more details.
+
+SPDX-License-Identifier: `GPL-3.0-or-later`
+
+Third-party code keeps its own licence: highlight.js (BSD-3-Clause,
+`third_party/highlight/LICENSE`) and KaTeX (MIT, `third_party/katex/LICENSE`). Both are
+compatible with the GPLv3, as are the libraries DisOkular links against: Qt (LGPLv3),
+md4c (MIT) and libsynctex (MIT-style).
