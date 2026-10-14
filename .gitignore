@@ -1,3 +1,4 @@
-build/
+# Cartelle di build (build/ di sviluppo, build-release/ di install.sh, eventuali altre)
+build*/
 .cache/
 compile_commands.json
