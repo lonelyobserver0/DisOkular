@@ -1,6 +1,7 @@
 # DisOkular
 
-A desktop document reader for **PDF**, **Markdown** and **LaTeX**, written in C++17 with Qt 6.
+A desktop document reader for **PDF**, **Markdown** and **LaTeX** that also opens **images**,
+written in C++17 with Qt 6.
 
 LaTeX sources are compiled in the background and displayed as PDF, with SyncTeX in both
 directions and automatic bibliography generation. Markdown is rendered with full CSS, code
@@ -42,6 +43,17 @@ front matter). The user interface is in Italian.
 
 ![LaTeX with SyncTeX forward search](docs/screenshots/latex-synctex.png)
 
+### Images
+- PNG, JPEG, GIF, WebP, SVG/SVGZ, BMP, TIFF, TGA, ICO and the other formats the installed Qt
+  image plugins can read. The list is queried at runtime, so installing `kimageformats` adds
+  AVIF, JPEG XL, HEIF and more without rebuilding
+- Animated GIF and WebP, with Space to pause and resume and the frame number in the status bar
+- Fit to window by default (photos are never upscaled; SVGs are), Ctrl+wheel zoom around the
+  cursor, drag to pan, double-click to toggle between fit and 100%
+- SVGs are redrawn at every zoom level, so they stay sharp; pixel art stays crisp when magnified
+- Checkerboard behind transparent areas; EXIF orientation applied to photos
+- "Copy image" from the context menu
+
 ### General
 - Tabs, drag and drop, fullscreen
 - Automatic reload when a file changes on disk. For LaTeX this includes included chapters
@@ -59,6 +71,8 @@ front matter). The user interface is in Italian.
 | Component | Used for | Arch Linux package |
 |---|---|---|
 | Qt ≥ 6.8: Widgets, Network | UI, single-instance socket | `qt6-base` |
+| Qt SVG | SVG images | `qt6-svg` |
+| Qt image format plugins (optional) | WebP, TIFF, TGA, ICNS… | `qt6-imageformats` |
 | Qt PDF, Qt WebEngine | PDF rendering, Markdown view | `qt6-webengine` |
 | md4c (with md4c-html) | Markdown → HTML | `md4c` |
 | libsynctex | SyncTeX | `libsynctex` |
@@ -89,7 +103,8 @@ application launchers and in "Open with" menus. The binary itself is self-contai
 stylesheets, scripts and fonts are compiled in as Qt resources.
 
 `--set-default` changes the per-user associations in `~/.config/mimeapps.list` for
-`application/pdf`, `text/markdown` and `text/x-tex`. The previous defaults are saved first,
+`application/pdf`, `text/markdown` and `text/x-tex`. Images appear in "Open with" menus but
+your default image viewer is left alone. The previous defaults are saved first,
 and `--uninstall` puts them back exactly as they were.
 
 ### Build and run manually
@@ -123,8 +138,9 @@ disokular --new-instance [file...]
 | Reload | F5 |
 | Close tab | Ctrl+W |
 | Find / next / previous | Ctrl+F, then Enter / Shift+Enter; Esc closes |
-| Zoom in / out / reset | Ctrl++ / Ctrl+- / Ctrl+0 |
-| Fit width (PDF, LaTeX) | Ctrl+9 |
+| Zoom in / out / reset | Ctrl++ / Ctrl+- / Ctrl+0 (images: also Ctrl+wheel) |
+| Fit width (PDF, LaTeX) / fit to window (images) | Ctrl+9 |
+| Pause / resume animation | Space |
 | Previous / next page | Ctrl+PgUp / Ctrl+PgDown |
 | First / last page | Ctrl+Home / Ctrl+End |
 | Outline panel | F7 |
@@ -173,6 +189,7 @@ src/
   LatexView            compile pipeline (engine passes, bibtex/biber), SyncTeX, error log
   MarkdownView         QWebEngineView page, links, outline from headings
   MarkdownRenderer     md4c → HTML, front matter, wikilinks and embeds
+  ImageView            raster, animated and SVG images: zoom, pan, checkerboard
   SyncTex              libsynctex wrapper
   OutlinePanel         bookmarks/headings tree shared by all formats
   WelcomePage, History welcome page and document history

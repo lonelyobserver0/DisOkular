@@ -24,6 +24,7 @@ use_sudo=0
 set_default=0
 
 readonly DESKTOP_ID="disokular.desktop"
+# Solo i documenti: le immagini compaiono in "Apri con", ma il visualizzatore predefinito non si tocca.
 readonly MIME_TYPES=(application/pdf text/markdown text/x-markdown text/x-tex)
 readonly CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 readonly MIMEAPPS="$CONFIG_DIR/mimeapps.list"

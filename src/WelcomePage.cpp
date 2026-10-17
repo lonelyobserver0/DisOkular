@@ -66,6 +66,7 @@ Badge badgeFor(const QString &path)
     case Kind::Pdf:      return {u"PDF"_s, QColor(0xd9, 0x48, 0x3b)};
     case Kind::Markdown: return {u"MD"_s,  QColor(0x35, 0x74, 0xf0)};
     case Kind::Latex:    return {u"TEX"_s, QColor(0x2e, 0x8b, 0x57)};
+    case Kind::Image:    return {u"IMG"_s, QColor(0x8e, 0x5c, 0xc4)};
     case Kind::Unknown:  break;
     }
     return {u"?"_s, QColor(0x88, 0x88, 0x88)};

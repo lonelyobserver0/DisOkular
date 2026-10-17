@@ -3,6 +3,7 @@
 #include "LatexView.h"
 #include "MarkdownView.h"
 #include "History.h"
+#include "ImageView.h"
 #include "OutlinePanel.h"
 #include "WelcomePage.h"
 #include "PdfView.h"
@@ -157,6 +158,7 @@ void MainWindow::createActions()
     add(settings, tr("Editor per SyncTeX…"), "document-edit", QKeySequence(), &MainWindow::chooseEditor);
 
     m_docActions = {reload, close, zin, zout, zreset, find};
+    m_findAction = find;
     m_pageActions = {zfit, prev, next, first, last};
 
     // Barra principale
@@ -232,9 +234,11 @@ bool MainWindow::openFile(const QString &path, const QString &anchor)
     case Kind::Pdf:      view = new PdfView(abs); break;
     case Kind::Markdown: view = new MarkdownView(abs); break;
     case Kind::Latex:    view = new LatexView(abs); break;
+    case Kind::Image:    view = new ImageView(abs); break;
     case Kind::Unknown:
         QMessageBox::warning(this, tr("Formato non supportato"),
-                             tr("Non so aprire \"%1\".\nFormati supportati: PDF, Markdown, LaTeX.").arg(fi.fileName()));
+                             tr("Non so aprire \"%1\".\nFormati supportati: PDF, Markdown, LaTeX e immagini (%2).")
+                                 .arg(fi.fileName(), imageSuffixes().join(u", "_s)));
         return false;
     }
 
@@ -340,11 +344,16 @@ void MainWindow::chooseEditor()
 void MainWindow::openDialog()
 {
     QSettings s;
+    // I formati immagine dipendono dai plugin Qt installati: il filtro si costruisce al volo.
+    QStringList images;
+    for (const QString &ext : imageSuffixes())
+        images << u"*."_s + ext;
+    const QString docs = u"*.pdf *.md *.markdown *.mkd *.mdown *.tex *.latex *.ltx"_s;
     const QStringList files = QFileDialog::getOpenFileNames(
         this, tr("Apri documento"), s.value("lastDir").toString(),
-        tr("Documenti (*.pdf *.md *.markdown *.mkd *.mdown *.tex *.latex *.ltx);;"
+        tr("Tutti i formati supportati (%1 %2);;"
            "PDF (*.pdf);;Markdown (*.md *.markdown *.mkd *.mdown);;LaTeX (*.tex *.latex *.ltx);;"
-           "Tutti i file (*)"));
+           "Immagini (%2);;Tutti i file (*)").arg(docs, images.join(u' ')));
     for (const QString &f : files)
         openFile(f);
     if (!files.isEmpty())
@@ -423,6 +432,10 @@ void MainWindow::updateUi()
 
     for (QAction *a : std::as_const(m_docActions))
         a->setEnabled(v);
+    // Nelle immagini non c'è testo da cercare.
+    m_findAction->setEnabled(v && v->canSearch());
+    if (v && !v->canSearch())
+        m_findBar->hide();
     for (QAction *a : std::as_const(m_pageActions))
         a->setEnabled(paged);
     m_pageSpinAction->setVisible(paged);

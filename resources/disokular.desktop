@@ -3,8 +3,8 @@ Type=Application
 Name=DisOkular
 GenericName=Document Viewer
 GenericName[it]=Lettore di documenti
-Comment=Read PDF, Markdown and LaTeX documents
-Comment[it]=Leggi documenti PDF, Markdown e LaTeX
+Comment=Read PDF, Markdown and LaTeX documents and view images
+Comment[it]=Leggi documenti PDF, Markdown e LaTeX e guarda immagini
 Exec=disokular %F
 TryExec=disokular
 Icon=disokular
@@ -12,9 +12,9 @@ Terminal=false
 StartupNotify=true
 StartupWMClass=disokular
 Categories=Office;Viewer;Qt;
-Keywords=pdf;markdown;latex;tex;viewer;reader;
-Keywords[it]=pdf;markdown;latex;tex;lettore;visualizzatore;
-MimeType=application/pdf;text/markdown;text/x-markdown;text/x-tex;
+Keywords=pdf;markdown;latex;tex;viewer;reader;image;svg;gif;
+Keywords[it]=pdf;markdown;latex;tex;lettore;visualizzatore;immagine;svg;gif;
+MimeType=application/pdf;text/markdown;text/x-markdown;text/x-tex;image/png;image/jpeg;image/gif;image/webp;image/svg+xml;image/svg+xml-compressed;image/bmp;image/tiff;image/x-tga;image/vnd.microsoft.icon;image/x-portable-anymap;
 Actions=new-window;
 
 [Desktop Action new-window]

@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Qt6 6.8 REQUIRED COMPONENTS Widgets Pdf PdfWidgets WebEngineWidgets Network)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Widgets Pdf PdfWidgets WebEngineWidgets Network Svg)
 find_package(md4c REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SYNCTEX REQUIRED IMPORTED_TARGET synctex)
@@ -25,6 +25,7 @@ qt_add_executable(disokular
     src/SingleInstance.h  src/SingleInstance.cpp
     src/History.h         src/History.cpp
     src/WelcomePage.h     src/WelcomePage.cpp
+    src/ImageView.h       src/ImageView.cpp
     src/LatexView.h       src/LatexView.cpp
 )
 
@@ -56,7 +57,7 @@ qt_add_resources(disokular "markdown_third_party"
 )
 
 target_link_libraries(disokular PRIVATE
-    Qt6::Widgets Qt6::Pdf Qt6::PdfWidgets Qt6::WebEngineWidgets Qt6::Network
+    Qt6::Widgets Qt6::Pdf Qt6::PdfWidgets Qt6::WebEngineWidgets Qt6::Network Qt6::Svg
     md4c::md4c-html
     PkgConfig::SYNCTEX
 )

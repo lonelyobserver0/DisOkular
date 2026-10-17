@@ -9,7 +9,10 @@
 // Le sottoclassi implementano caricamento, zoom, navigazione e ricerca.
 class QAbstractItemModel;
 
-enum class Kind { Unknown, Pdf, Markdown, Latex };
+enum class Kind { Unknown, Pdf, Markdown, Latex, Image };
+
+// Le estensioni d'immagine leggibili con i plugin Qt installati (minuscole, senza punto).
+const QStringList &imageSuffixes();
 
 // Il tipo di documento dall'estensione del file.
 Kind kindOf(const QString &path);
@@ -40,6 +43,8 @@ public:
     virtual int currentPage() const { return 0; }
     virtual void goToPage(int) {}
 
+    // I formati senza testo (immagini) non offrono la ricerca.
+    virtual bool canSearch() const { return true; }
     // Cerca l'occorrenza successiva (o precedente). false = nessun risultato.
     virtual bool find(const QString &text, bool backward) = 0;
 

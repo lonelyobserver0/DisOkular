@@ -1,6 +1,25 @@
 #include "DocumentView.h"
 
 #include <QFileInfo>
+#include <QImageReader>
+
+const QStringList &imageSuffixes()
+{
+    // Chiesto a Qt e non scritto a mano: installando kimageformats arrivano da soli AVIF, JXL, HEIF…
+    static const QStringList suffixes = [] {
+        QStringList list;
+        for (const QByteArray &f : QImageReader::supportedImageFormats())
+            list << QString::fromLatin1(f).toLower();
+        list.removeAll(QStringLiteral("pdf"));   // il plugin di QtPdf: i PDF hanno la loro vista
+        for (const char *svg : {"svg", "svgz"})
+            if (!list.contains(QLatin1String(svg)))
+                list << QLatin1String(svg);       // gli SVG li disegna QSvgRenderer, plugin o no
+        list.removeDuplicates();
+        list.sort();
+        return list;
+    }();
+    return suffixes;
+}
 
 Kind kindOf(const QString &path)
 {
@@ -11,6 +30,8 @@ Kind kindOf(const QString &path)
         return Kind::Markdown;
     if (ext == u"tex" || ext == u"latex" || ext == u"ltx")
         return Kind::Latex;
+    if (imageSuffixes().contains(ext))
+        return Kind::Image;
     return Kind::Unknown;
 }
 

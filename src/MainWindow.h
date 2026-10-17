@@ -66,6 +66,7 @@ private:
     QLabel *m_pageTotal;
     QLabel *m_statusLabel;
     QAction *m_pageSpinAction;
+    QAction *m_findAction;
     QAction *m_pageTotalAction;
     QMenu *m_recentMenu;
     QList<QAction *> m_docActions;      // attive solo con un documento aperto
